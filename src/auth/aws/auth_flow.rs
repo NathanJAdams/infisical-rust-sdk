@@ -16,7 +16,6 @@ use std::{collections::BTreeMap, str::FromStr, time::SystemTime};
 const HEADER_CONTENT_LENGTH_KEY: &str = "content-length";
 const HEADER_CONTENT_TYPE_VALUE: &str = "application/x-www-form-urlencoded";
 const HEADER_SESSION_TOKEN_KEY: &str = "x-amz-security-token";
-const INFISICAL_BASE_URL: &str = "https://app.infisical.com";
 pub(crate) const INFISICAL_AWS_LOGIN_PATH: &str = "/api/v1/auth/aws-auth/login";
 
 pub(crate) struct AwsAuthFlow;
@@ -24,17 +23,18 @@ pub(crate) struct AwsAuthFlow;
 impl AwsAuthFlow {
     pub async fn try_access_token(
         http_client: &reqwest::Client,
+        base_url: &str,
         identity_id: &str,
     ) -> Result<String, InfisicalError> {
         let sdk_config = Self::sdk_config().await;
-        Self::try_access_token_with(http_client, identity_id, &sdk_config, INFISICAL_BASE_URL).await
+        Self::try_access_token_with_config(http_client, identity_id, base_url, &sdk_config).await
     }
     /// Allows e2e testing
-    pub(crate) async fn try_access_token_with(
+    pub(crate) async fn try_access_token_with_config(
         http_client: &reqwest::Client,
         identity_id: &str,
-        sdk_config: &SdkConfig,
         base_url: &str,
+        sdk_config: &SdkConfig,
     ) -> Result<String, InfisicalError> {
         let region = Self::region(sdk_config);
         let credentials = Self::credentials(sdk_config).await?;

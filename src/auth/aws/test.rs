@@ -36,10 +36,14 @@ async fn aws_auth_flow_signs_and_posts_to_infisical() {
 
     // 3. Run the real flow against the mock
     let http_client = reqwest::Client::new();
-    let token =
-        AwsAuthFlow::try_access_token_with(&http_client, IDENTITY_ID, &sdk_config, &mock.uri())
-            .await
-            .expect("flow should succeed");
+    let token = AwsAuthFlow::try_access_token_with_config(
+        &http_client,
+        IDENTITY_ID,
+        &mock.uri(),
+        &sdk_config,
+    )
+    .await
+    .expect("flow should succeed");
 
     assert_eq!(token, TOKEN);
 

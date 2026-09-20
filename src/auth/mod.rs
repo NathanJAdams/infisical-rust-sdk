@@ -74,7 +74,7 @@ impl AuthHelper {
                     .await
             }
             AuthMethod::AwsAuth { identity_id } => {
-                AwsAuthFlow::try_access_token(http_client, &identity_id).await
+                AwsAuthFlow::try_access_token(http_client, &self.base_url, &identity_id).await
             }
         }
     }
