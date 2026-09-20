@@ -36,8 +36,8 @@ impl AwsAuthFlow {
         sdk_config: &SdkConfig,
         base_url: &str,
     ) -> Result<String, InfisicalError> {
-        let region = Self::region(&sdk_config);
-        let credentials = Self::credentials(&sdk_config).await?;
+        let region = Self::region(sdk_config);
+        let credentials = Self::credentials(sdk_config).await?;
         let endpoint = Self::endpoint(&region);
         let headers = Self::headers(&credentials);
         let body = Self::body();
